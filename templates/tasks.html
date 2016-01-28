@@ -14,7 +14,7 @@
       {% if task %}
         <a href="/tasks/{{ task.short_name|lower }}/{{ task.score }}">
           <div class="chall-box chall-task col-md-1 {% if task.id in flags %}chall-done{% endif %}">
-            {{ task.short_name }}{{ task.score }}
+            {{ task.score }}
           </div>
         </a>
       {% else %}
