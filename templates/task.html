@@ -14,11 +14,13 @@
           {{ task.desc|safe }}
         {% endif %}
       </p>
+	  {% if task.file %}
       <p>
         <b>{{ lang.task.attachment }}: </b>
         <a href="{{ url_for('static', 
           filename='files/'+task.file) }}">{{ task.file }}</a>
       </p>
+	  {% endif %}
       <input id="flag-input" type="text" class="form-control" 
         placeholder="{% if task_done %}{{ lang.task.success }}{% 
         else %}{{ lang.task.placeholder }}{% endif %}">
