@@ -44,13 +44,12 @@ def get_user():
 
     return (False, None)
 
-def get_task(category, score):
+def get_task(tid):
     """Finds a task with a given category and score"""
 
-    task = db.query('''select t.* from tasks t, categories c, cat_task ct
-        where t.id = ct.task_id and c.id = ct.cat_id
-        and t.score=:score and lower(c.short_name)=:cat''',
-        score=score, cat=category)
+    task = db.query("SELECT t.*, c.name cat_name FROM tasks t JOIN categories c on c.id = t.category WHERE t.id = :tid",
+            tid=tid)
+
     return list(task)[0]
 
 def get_flags():
@@ -173,14 +172,14 @@ def tasks():
         flags=flags)
     return make_response(render)
 
-@app.route('/tasks/<category>/<score>')
+@app.route('/tasks/<tid>/')
 @login_required
-def task(category, score):
+def task(tid):
     """Displays a task with a given category and score"""
 
     login, user = get_user()
 
-    task = get_task(category, score)
+    task = get_task(tid)
     if not task:
         return redirect('/error/task_not_found')
 
@@ -193,7 +192,7 @@ def task(category, score):
     # Render template
     render = render_template('frame.html', lang=lang, page='task.html',
         task_done=task_done, login=login, solutions=solutions,
-        user=user, category=category, task=task, score=score)
+        user=user, category=task["cat_name"], task=task, score=task["score"])
     return make_response(render)
 
 @app.route('/submit/<category>/<score>/<flag>')
