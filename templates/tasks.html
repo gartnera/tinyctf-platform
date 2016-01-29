@@ -25,7 +25,7 @@
 				{{ task.score }}
 			</div>
 		</a>
-		{% elif task.end and user.isAdmin %}
+		{% elif task.end %}
 		<a href="/addtask/{{ task.category }}" >
 			<div class="add-box col-md-1">
 				+

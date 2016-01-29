@@ -176,8 +176,9 @@ def tasks():
             rowCount += 1
 
         if currentCat != cat:
-            endTask = { "end": True, "category": currentCat };
-            grid[currentCatCount][currentCat] = endTask
+            if user['isAdmin']:
+                endTask = { "end": True, "category": currentCat };
+                grid[currentCatCount][currentCat] = endTask
             currentCat = cat
             currentCatCount = 0
 
@@ -185,10 +186,9 @@ def tasks():
         currentCatCount += 1
 
     #add the final endTask element
-    endTask = { "end": True, "category": currentCat };
-    grid[currentCatCount][currentCat] = endTask
-
-
+    if user['isAdmin']:
+        endTask = { "end": True, "category": currentCat };
+        grid[currentCatCount][currentCat] = endTask
 
     # Render template
     render = render_template('frame.html', lang=lang, page='tasks.html',
