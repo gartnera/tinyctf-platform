@@ -153,7 +153,7 @@ def tasks():
     rowCount = 0
     currentCat = 0
     currentCatCount = 0
-    for i, task in enumerate(tasks):
+    for task in tasks:
         cat = task["category"] - 1
         if currentCat != cat:
             currentCat = cat
@@ -195,16 +195,16 @@ def task(tid):
         user=user, category=task["cat_name"], task=task, score=task["score"])
     return make_response(render)
 
-@app.route('/submit/<category>/<score>/<flag>')
+@app.route('/submit/<tid>/<flag>')
 @login_required
-def submit(category, score, flag):
+def submit(tid, flag):
     """Handles the submission of flags"""
 
     print "ok"
 
     login, user = get_user()
 
-    task = get_task(category, score)
+    task = get_task(tid)
     flags = get_flags()
     task_done = task['id'] in flags
 
@@ -215,7 +215,7 @@ def submit(category, score, flag):
 
         # Insert flag
         new_flag = dict(task_id=task['id'], user_id=session['user_id'],
-            score=score, timestamp=timestamp)
+            score=task["score"], timestamp=timestamp)
         db['flags'].insert(new_flag)
 
         result['success'] = True
