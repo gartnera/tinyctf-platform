@@ -35,6 +35,19 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def admin_required(f):
+    """Ensures that an user is logged in"""
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('error', msg='login_required'))
+        user = get_user()
+        if user["isAdmin"] == False:
+            return redirect(url_for('error', msg='admin_required'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 def get_user():
     """Looks up the current user in the database"""
 

@@ -28,9 +28,10 @@
             "submit": "Submit",
             "success": "Correct flag!",
             "failure": "Incorrect flag",
+			"points_format": "%d points",
             "solution_format": "solved by %d",
             "no_description": "(none)",
-            "placeholder": "flag{insert_flag_here}"
+            "placeholder": "Flag goes here"
         },
         "scoreboard": {
             "title": "Scoreboard",
@@ -41,6 +42,7 @@
             "title": "Error",
             "unknown": "Unknown error",
             "login_required": "You need to be logged in to see this page",
+            "login_required": "You need to be an admin to see this page",
             "invalid_credentials": "Invalid username or password",
             "already_registered": "This user is already registered",
             "empty_user": "Empty username is not allowed",
