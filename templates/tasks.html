@@ -6,13 +6,14 @@
         {{ category.name }}
       </div>
     {% endfor %}
+
   </div>
 
   {% for row in grid %}
     <div class="row">
     {% for task in row %}
       {% if task %}
-        <a href="/tasks/{{ task.short_name|lower }}/{{ task.score }}">
+        <a href="/tasks/{{ task.id }}">
           <div class="chall-box chall-task col-md-1 {% if task.id in flags %}chall-done{% endif %}">
             {{ task.score }}
           </div>
