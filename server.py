@@ -153,18 +153,29 @@ def tasks():
     rowCount = 0
     currentCat = 0
     currentCatCount = 0
+
     for task in tasks:
         cat = task["category"] - 1
-        if currentCat != cat:
-            currentCat = cat
-            currentCatCount = 0
 
         if currentCatCount >= rowCount:
             row = [None] * catCount
             grid.append(row)
+            rowCount += 1
+
+        if currentCat != cat:
+            endTask = { "end": True, "category": currentCat };
+            grid[currentCatCount][currentCat] = endTask
+            currentCat = cat
+            currentCatCount = 0
 
         grid[currentCatCount][cat] = task
         currentCatCount += 1
+
+    #add the final endTask element
+    endTask = { "end": True, "category": currentCat };
+    grid[currentCatCount][currentCat] = endTask
+
+
 
     # Render template
     render = render_template('frame.html', lang=lang, page='tasks.html',
