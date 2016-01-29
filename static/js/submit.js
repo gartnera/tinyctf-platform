@@ -1,13 +1,10 @@
 $("#flag-submission").click(function() {
+	var flag = $("#flag-input").val();
 
-    var cat = $(".task-box").data("category");
-    var score = $(".task-box").data("score");
-    var flag = $("#flag-input").val();
-
-    console.log("/submit/" + cat + "/" + score + "/" + btoa(flag));
+	var id = $("#task-id").val()
 
     $.ajax({
-        url: "/submit/" + cat + "/" + score + "/" + btoa(flag)
+        url: "/submit/" + id + "/" + btoa(flag)
     }).done(function(data) {
 
         console.log(data);

@@ -88,6 +88,18 @@ background-size: cover;
     color: #333;
 }
 
+.add-box {
+    margin: 50px;
+    width: 60px;
+    height: 60px;
+    padding-top: 3px;
+    border-radius: 50%;
+    text-align:center;
+    background-color: rgba(0,0,0,0.25);
+    font-size: 30pt;
+    color: white;
+}
+
 .chall-category {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
