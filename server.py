@@ -195,6 +195,28 @@ def tasks():
         user=user, categories=categories, grid=grid, flags=flags)
     return make_response(render)
 
+@app.route('/addcat/', methods=['GET'])
+@admin_required
+def addcat():
+    if request.method == 'GET':
+        user = get_user()
+        render = render_template('frame.html', lang=lang, user=user, page='addcat.html')
+        return make_response(render)
+
+
+@app.route('/addcat/', methods=['POST'])
+@admin_required
+def addcatsubmit():
+    if request.method == 'POST':
+        name = request.form['name']
+        if name:
+            categories = db['categories']
+            categories.insert(dict(name=name))
+            return redirect('/tasks')
+        else:
+            return redirect('/error/form')
+
+
 @app.route('/tasks/<tid>/')
 @login_required
 def task(tid):
