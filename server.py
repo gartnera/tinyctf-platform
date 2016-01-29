@@ -53,9 +53,9 @@ def get_user():
 
     login = 'user_id' in session
     if login:
-        return (True, db['users'].find_one(id=session['user_id']))
+        return db['users'].find_one(id=session['user_id'])
 
-    return (False, None)
+    return None
 
 def get_task(tid):
     """Finds a task with a given category and score"""
@@ -82,10 +82,10 @@ def error(msg):
     else:
         message = lang['error']['unknown']
 
-    login, user = get_user()
+    user = get_user()
 
     render = render_template('frame.html', lang=lang, page='error.html',
-        message=message, login=login, user=user)
+        message=message, user=user)
     return make_response(render)
 
 def session_login(username):
@@ -151,7 +151,7 @@ def register_submit():
 def tasks():
     """Displays all the tasks in a grid"""
 
-    login, user = get_user()
+    user = get_user()
     flags = get_flags()
 
     categories = db['categories']
@@ -192,8 +192,7 @@ def tasks():
 
     # Render template
     render = render_template('frame.html', lang=lang, page='tasks.html',
-        login=login, user=user, categories=categories, grid=grid,
-        flags=flags)
+        user=user, categories=categories, grid=grid, flags=flags)
     return make_response(render)
 
 @app.route('/tasks/<tid>/')
@@ -201,7 +200,7 @@ def tasks():
 def task(tid):
     """Displays a task with a given category and score"""
 
-    login, user = get_user()
+    user = get_user()
 
     task = get_task(tid)
     if not task:
@@ -226,7 +225,7 @@ def submit(tid, flag):
 
     print "ok"
 
-    login, user = get_user()
+    user = get_user()
 
     task = get_task(tid)
     flags = get_flags()
@@ -251,7 +250,7 @@ def submit(tid, flag):
 def scoreboard():
     """Displays the scoreboard"""
 
-    login, user = get_user()
+    user = get_user()
     scores = db.query('''select u.username, ifnull(sum(f.score), 0) as score,
         max(timestamp) as last_submit from users u left join flags f
         on u.id = f.user_id where u.hidden = 0 group by u.username
@@ -261,7 +260,7 @@ def scoreboard():
 
     # Render template
     render = render_template('frame.html', lang=lang, page='scoreboard.html',
-        login=login, user=user, scores=scores)
+        user=user, scores=scores)
     return make_response(render)
 
 @app.route('/about')
@@ -269,11 +268,11 @@ def scoreboard():
 def about():
     """Displays the about menu"""
 
-    login, user = get_user()
+    user = get_user()
 
     # Render template
     render = render_template('frame.html', lang=lang, page='about.html',
-        login=login, user=user)
+        user=user)
     return make_response(render)
 
 @app.route('/logout')
@@ -288,11 +287,11 @@ def logout():
 def index():
     """Displays the main page"""
 
-    login, user = get_user()
+    user = get_user()
 
     # Render template
     render = render_template('frame.html', lang=lang,
-        page='main.html', login=login, user=user)
+        page='main.html', user=user)
     return make_response(render)
 
 if __name__ == '__main__':
