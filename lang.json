@@ -33,6 +33,18 @@
             "no_description": "(none)",
             "placeholder": "Flag goes here"
         },
+		"addcat" : {
+			"title": "Add a Category",
+			"name_label": "Category Name: "
+		},
+		"addtask" : {
+			"title": "Add a Task",
+			"cat_label": "Category: ",
+			"name_label": "Task Name: ",
+			"description_label": "Description: ",
+			"flag_label": "Flag: ",
+			"score_label": "Score: "
+		},
         "scoreboard": {
             "title": "Scoreboard",
             "player": "Player",
@@ -46,7 +58,8 @@
             "invalid_credentials": "Invalid username or password",
             "already_registered": "This user is already registered",
             "empty_user": "Empty username is not allowed",
-            "task_not_found": "TBD"
+            "task_not_found": "TBD",
+			"form": "Invalid form input"
         }
     }
 }

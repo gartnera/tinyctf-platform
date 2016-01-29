@@ -77,7 +77,7 @@ def get_flags():
 def error(msg):
     """Displays an error message"""
 
-    if msg in lang:
+    if msg in lang['error']:
         message = lang['error'][msg]
     else:
         message = lang['error']['unknown']
@@ -205,24 +205,58 @@ def tasks():
 @app.route('/addcat/', methods=['GET'])
 @admin_required
 def addcat():
-    if request.method == 'GET':
-        user = get_user()
-        render = render_template('frame.html', lang=lang, user=user, page='addcat.html')
-        return make_response(render)
-
+    user = get_user()
+    render = render_template('frame.html', lang=lang, user=user, page='addcat.html')
+    return make_response(render)
 
 @app.route('/addcat/', methods=['POST'])
 @admin_required
 def addcatsubmit():
-    if request.method == 'POST':
+    try:
         name = request.form['name']
-        if name:
-            categories = db['categories']
-            categories.insert(dict(name=name))
-            return redirect('/tasks')
-        else:
-            return redirect('/error/form')
+    except KeyError:
+        return redirect('/error/form')
+    else:
+        categories = db['categories']
+        categories.insert(dict(name=name))
+        return redirect('/tasks')
 
+@app.route('/addtask/<cat>/', methods=['GET'])
+@admin_required
+def addtask(cat):
+    category = db.query('SELECT * FROM categories LIMIT 1 OFFSET :cat', cat=cat)
+    category = list(category)
+    category = category[0]
+
+    user = get_user()
+
+    render = render_template('frame.html', lang=lang, user=user,
+            cat_name=category['name'], cat_id=category['id'], page='addtask.html')
+    return make_response(render)
+
+@app.route('/addtask/<cat>/', methods=['POST'])
+@admin_required
+def addtasksubmit(cat):
+    try:
+        name = request.form['name']
+        desc = request.form['desc']
+        category = int(request.form['category'])
+        score = int(request.form['score'])
+        flag = request.form['flag']
+    except KeyError:
+        return redirect('/error/form')
+
+    else:
+        tasks = db['tasks']
+        task = dict(
+                name=name,
+                desc=desc,
+                category=category,
+                score=score,
+                flag=flag)
+
+        tasks.insert(task)
+        return redirect('/tasks')
 
 @app.route('/tasks/<tid>/')
 @login_required

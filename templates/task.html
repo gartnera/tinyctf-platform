@@ -1,7 +1,6 @@
 <div class="landing-page container">
   <div class="row">
-    <div class="task-box col-md-6 col-md-offset-3" 
-      data-category="{{ category|lower }}" data-score="{{ score }}">
+	  <div class="task-box col-md-6 col-md-offset-3" >
       <h1>{{ task.name }}</h1>
 	  <h5>({{ score }} points, 
         {{ lang.task.solution_format % solutions }})</h5>
@@ -21,6 +20,7 @@
           filename='files/'+task.file) }}">{{ task.file }}</a>
       </p>
 	  {% endif %}
+	  <input id="task-id" type="hidden" value="{{ task.id }}" />
       <input id="flag-input" type="text" class="form-control" 
         placeholder="{% if task_done %}{{ lang.task.success }}{% 
         else %}{{ lang.task.placeholder }}{% endif %}">
