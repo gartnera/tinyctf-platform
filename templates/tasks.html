@@ -22,7 +22,7 @@
 		{% if task.id  %}
 		<a href="/tasks/{{ task.id }}">
 			<div style="animation-delay: -{{task.percentComplete}}s" class="chall-box chall-task col-md-1 {% if task.isComplete %}chall-done{% endif %}">
-				<span>{{ task.score }}</span>
+				<span class="chall-box-score">{{ task.score }}</span>
 			</div>
 		</a>
 		{% elif task.end %}

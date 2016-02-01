@@ -77,7 +77,7 @@ background-size: cover;
  */
 
 
-span {
+.chall-box-score {
 	z-index:100;
 	position:relative;
 	width: 130px;
