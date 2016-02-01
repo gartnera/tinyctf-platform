@@ -259,7 +259,7 @@ def addtask(cat):
 def addtasksubmit(cat):
     try:
         name = strip_markup(request.form['name'])
-        desc = sanitize(request.form['desc'])
+        desc = sanitize(request.form['desc'], wrap=None)
         category = int(request.form['category'])
         score = int(request.form['score'])
         flag = request.form['flag']
@@ -308,7 +308,7 @@ def edittask(tid):
 def edittasksubmit(tid):
     try:
         name = strip_markup(request.form['name'])
-        desc = sanitize(request.form['desc'])
+        desc = sanitize(request.form['desc'], wrap=None)
         category = int(request.form['category'])
         score = int(request.form['score'])
         flag = request.form['flag']
