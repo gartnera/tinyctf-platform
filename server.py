@@ -6,6 +6,9 @@ import dataset
 import json
 import random
 import time
+import hashlib
+import datetime
+import os
 
 from base64 import b64decode
 from functools import wraps
@@ -263,6 +266,7 @@ def addtasksubmit(cat):
     except KeyError:
         return redirect('/error/form')
 
+
     else:
         tasks = db['tasks']
         task = dict(
@@ -271,6 +275,17 @@ def addtasksubmit(cat):
                 category=category,
                 score=score,
                 flag=flag)
+        file = request.files['file']
+
+        if file:
+            filename, ext = os.path.splitext(file.filename)
+            #hash current time for file name
+            filename = hashlib.md5(str(datetime.datetime.utcnow())).hexdigest()
+            #if upload has extension, append to filename
+            if ext:
+                filename = filename + ext
+            file.save(os.path.join("static/files/", filename))
+            task["file"] = filename
 
         tasks.insert(task)
         return redirect('/tasks')
