@@ -2,7 +2,7 @@
 
 	<div class="row">
 		{% for category in categories %}
-		<div class="chall-box chall-category col-md-1">
+		<div class="chall-category col-md-1">
 			{{ category.name }}
 		</div>
 		{% endfor %}
@@ -21,8 +21,8 @@
 		{% for task in row %}
 		{% if task.id  %}
 		<a href="/tasks/{{ task.id }}">
-			<div class="chall-box chall-task col-md-1 {% if task.id in flags %}chall-done{% endif %}">
-				{{ task.score }}
+			<div style="animation-delay: -{{task.percentComplete}}s" class="chall-box chall-task col-md-1 {% if task.isComplete %}chall-done{% endif %}">
+				<span>{{ task.score }}</span>
 			</div>
 		</a>
 		{% elif task.end %}
@@ -32,7 +32,7 @@
 			</div>
 		</a>
 		{% else %}
-		<div class="chall-box chall-hidden col-md-1">
+		<div class="chall-hidden col-md-1">
 			&nbsp;
 		</div>
 		{% endif %}

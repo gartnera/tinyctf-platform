@@ -152,10 +152,12 @@ def tasks():
     """Displays all the tasks in a grid"""
 
     user = get_user()
-    flags = get_flags()
+    userCount = db['users'].count()
 
     categories = db['categories']
     catCount = categories.count()
+
+    flags = db['flags']
 
     tasks = db.query("SELECT * FROM tasks ORDER BY category, score");
 
@@ -182,6 +184,19 @@ def tasks():
             currentCat = cat
             currentCatCount = 0
 
+
+        percentComplete = (float(flags.count(task_id=task['id'])) / userCount) * 100
+
+        #hax for bad css (if 100, nothing will show)
+        if percentComplete == 100:
+            percentComplete = 99.99
+
+        task['percentComplete'] = percentComplete
+
+        isComplete = bool(flags.count(task_id=task['id'], user_id=user['id']))
+
+        task['isComplete'] = isComplete
+
         grid[currentCatCount][cat] = task
         currentCatCount += 1
 
@@ -199,7 +214,7 @@ def tasks():
 
     # Render template
     render = render_template('frame.html', lang=lang, page='tasks.html',
-        user=user, categories=categories, grid=grid, flags=flags)
+        user=user, categories=categories, grid=grid)
     return make_response(render)
 
 @app.route('/addcat/', methods=['GET'])
