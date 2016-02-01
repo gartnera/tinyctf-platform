@@ -174,10 +174,14 @@ def tasks():
     currentCat = 0
     currentCatCount = 0
 
+    if len(tasks) == 0:
+        row = [None] * catCount
+        grid.append(row)
+
     for task in tasks:
         cat = task["category"] - 1
 
-        if currentCatCount >= rowCount:
+        while currentCatCount + 1 >= rowCount:
             row = [None] * catCount
             grid.append(row)
             rowCount += 1
@@ -207,8 +211,9 @@ def tasks():
 
     #add the final endTask element
     if user['isAdmin']:
-        endTask = { "end": True, "category": currentCat }
-        grid[currentCatCount][currentCat] = endTask
+        if len(tasks) > 0:
+            endTask = { "end": True, "category": currentCat }
+            grid[currentCatCount][currentCat] = endTask
 
         #if any None in first row, add end task
         for i, t in enumerate(grid[0]):
