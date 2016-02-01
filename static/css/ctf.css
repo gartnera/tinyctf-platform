@@ -7,7 +7,7 @@ body {
  */
 
 .full {
-background: url('../img/background.jpg') no-repeat center center fixed; 
+background-color: lightblue;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -52,12 +52,9 @@ background-size: cover;
 
 .circle {
     margin: 0;
-    width:550px;
-    height:550px;
     padding-top: 120px;
     border-radius:50%;
     text-align:center;
-    background-color: rgba(255, 255, 255, 0.75);
 }
 
 .circle-inner {
@@ -179,7 +176,7 @@ background-size: cover;
 .task-box {
     background-color: rgba(255, 255, 255, 0.75);
     padding-bottom: 20px;
-    width: 600px;
+    max-width: 600px;
 }
 
 .task-box input {
