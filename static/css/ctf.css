@@ -193,3 +193,13 @@ background-size: cover;
 .task-box h5 {
     text-align: center;
 }
+
+#task-edit-button {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 10px;
+	font-size: 20pt;
+	background-color: #ccc;
+	color: black;
+}

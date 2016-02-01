@@ -1,6 +1,11 @@
 <div class="landing-page container">
   <div class="row">
+	  {% if user.isAdmin %}
 	  <div class="task-box col-md-6 col-md-offset-3" >
+		  <a href="edit">
+			  <span id="task-edit-button" class="glyphicon glyphicon-edit"></span>
+		  </a>
+	  {% endif %}
       <h1>{{ task.name }}</h1>
 	  <h5>({{ score }} points, 
         {{ lang.task.solution_format % solutions }})</h5>
