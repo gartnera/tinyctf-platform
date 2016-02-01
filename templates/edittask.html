@@ -3,7 +3,7 @@
 		<div class="task-box col-md-6 col-md-offset-3" >
 			<h1>{{ lang.addtask.edit_title }} </h1>
 			<h5>{{ lang.addtask.cat_label}}{{ cat_name }} </h5>
-			<form method="POST">
+			<form method="POST" enctype="multipart/form-data" >
 				<input name="category" type="hidden" value="{{ cat_id }}" />
 
 				<label>{{ lang.addtask.name_label }}</label>
@@ -15,6 +15,9 @@
 
 				<label>{{ lang.addtask.score_label }}</label>
 				<input name="score" type="number" required="required" class="form-control" value="{{ task.score }}"/>
+
+				<label>File: </label>
+				<input name="file" type="file" class="form-control" />
 
 				<label>{{ lang.addtask.flag_label }}</label>
 				<input name="flag" type="text" required="required" class="form-control" />

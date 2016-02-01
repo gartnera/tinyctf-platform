@@ -322,17 +322,33 @@ def edittasksubmit(tid):
 
     else:
         tasks = db['tasks']
-        task = dict(
-                id=tid,
-                name=name,
-                desc=desc,
-                category=category,
-                score=score,
-                flag=flag)
+        task = tasks.find_one(id=tid)
+        task['id']=tid
+        task['name']=name
+        task['desc']=desc
+        task['category']=category
+        task['score']=score
+        task['flag']=flag
+
+        file = request.files['file']
+
+        if file:
+            filename, ext = os.path.splitext(file.filename)
+            #hash current time for file name
+            filename = hashlib.md5(str(datetime.datetime.utcnow())).hexdigest()
+            #if upload has extension, append to filename
+            if ext:
+                filename = filename + ext
+            file.save(os.path.join("static/files/", filename))
+
+            #remove old file
+            if task['file']:
+                os.remove(os.path.join("static/files/", task['file']))
+
+            task["file"] = filename
 
         tasks.update(task, ['id'])
         return redirect('/tasks')
-
 
 @app.route('/tasks/<tid>/')
 @login_required
