@@ -38,7 +38,8 @@
 			"name_label": "Category Name: "
 		},
 		"addtask" : {
-			"title": "Add a Task",
+			"add_title": "Add a Task",
+			"edit_title": "Edit a Task",
 			"cat_label": "Category: ",
 			"name_label": "Task Name: ",
 			"description_label": "Description: ",

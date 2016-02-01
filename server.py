@@ -9,6 +9,8 @@ import time
 
 from base64 import b64decode
 from functools import wraps
+from htmllaundry import sanitize
+from htmllaundry import strip_markup
 
 from flask import Flask
 from flask import jsonify
@@ -228,7 +230,7 @@ def addcat():
 @admin_required
 def addcatsubmit():
     try:
-        name = request.form['name']
+        name = strip_markup(request.form['name'])
     except KeyError:
         return redirect('/error/form')
     else:
@@ -253,8 +255,8 @@ def addtask(cat):
 @admin_required
 def addtasksubmit(cat):
     try:
-        name = request.form['name']
-        desc = request.form['desc']
+        name = strip_markup(request.form['name'])
+        desc = sanitize(request.form['desc'])
         category = int(request.form['category'])
         score = int(request.form['score'])
         flag = request.form['flag']
@@ -272,6 +274,45 @@ def addtasksubmit(cat):
 
         tasks.insert(task)
         return redirect('/tasks')
+
+@app.route('/tasks/<tid>/edit', methods=['GET'])
+@admin_required
+def edittask(tid):
+    user = get_user()
+
+    task = db["tasks"].find_one(id=tid);
+    category = db["categories"].find_one(id=task['category'])
+
+    render = render_template('frame.html', lang=lang, user=user,
+            cat_name=category['name'], cat_id=category['id'],
+            page='edittask.html', task=task)
+    return make_response(render)
+
+@app.route('/tasks/<tid>/edit', methods=['POST'])
+@admin_required
+def edittasksubmit(tid):
+    try:
+        name = strip_markup(request.form['name'])
+        desc = sanitize(request.form['desc'])
+        category = int(request.form['category'])
+        score = int(request.form['score'])
+        flag = request.form['flag']
+    except KeyError:
+        return redirect('/error/form')
+
+    else:
+        tasks = db['tasks']
+        task = dict(
+                id=tid,
+                name=name,
+                desc=desc,
+                category=category,
+                score=score,
+                flag=flag)
+
+        tasks.update(task, ['id'])
+        return redirect('/tasks')
+
 
 @app.route('/tasks/<tid>/')
 @login_required
