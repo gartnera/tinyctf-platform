@@ -2,6 +2,13 @@ body {
 	background: transparent;
 }
 
+
+
+* {
+	font-family: 'Open Sans', sans-serif;
+}
+
+
 /* Background style */
 #particles-js {
 	position: fixed;
@@ -146,10 +153,10 @@ background-size: cover;
 
 
 .add-box {
+
     margin: 50px;
     width: 60px;
     height: 60px;
-    padding-top: 3px;
     border-radius: 50%;
     text-align:center;
     background-color: rgba(0,0,0,0.25);
