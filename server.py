@@ -145,6 +145,7 @@ def register_submit():
     from werkzeug.security import generate_password_hash
 
     username = request.form['user']
+    email = request.form['email']
     password = request.form['password']
 
     if not username:
@@ -154,7 +155,7 @@ def register_submit():
     if user_found:
         return redirect('/error/already_registered')
 
-    new_user = dict(hidden=0, username=username,
+    new_user = dict(username=username, email=email,
         password=generate_password_hash(password), isAdmin=False)
     db['users'].insert(new_user)
 
