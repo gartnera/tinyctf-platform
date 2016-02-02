@@ -392,8 +392,6 @@ def task(tid):
 def submit(tid, flag):
     """Handles the submission of flags"""
 
-    print "ok"
-
     user = get_user()
 
     task = get_task(tid)
@@ -404,10 +402,12 @@ def submit(tid, flag):
     if not task_done and task['flag'] == b64decode(flag):
 
         timestamp = int(time.time() * 1000)
+        ip = request.remote_addr
+        print "flag submitter ip: {}".format(ip)
 
         # Insert flag
         new_flag = dict(task_id=task['id'], user_id=session['user_id'],
-            score=task["score"], timestamp=timestamp)
+            score=task["score"], timestamp=timestamp, ip=ip)
         db['flags'].insert(new_flag)
 
         result['success'] = True
