@@ -1,5 +1,19 @@
 body {
-  background: transparent;
+	background: transparent;
+}
+
+/* Background style */
+#particles-js {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-size: cover;
+	background-position: center 75%;
+}
+
+#particles-js > canvas {
+	background-color: rgb(103,124,131);
 }
 
 /*
@@ -7,11 +21,14 @@ body {
  */
 
 .full {
-background-color: lightblue;
+background-color: rgb(68,78,82);
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
 background-size: cover;
+}
+.table{
+	position:relative;
 }
 .table > thead > tr > th {
    background-color: rgba(0, 0, 0, 0.5); 
@@ -50,14 +67,15 @@ background-size: cover;
  * Main circle
  */
 
-.circle {
-    margin: 0;
-    padding-top: 120px;
-    border-radius:50%;
+.main {
+	position: relative;
+	top: 20px;
+	padding: 20px 0;
     text-align:center;
+	background-color: rgba(255, 255, 255, 0.75);
 }
 
-.circle-inner {
+.main > p {
 
     padding-left: 50px;
     padding-right: 50px;
