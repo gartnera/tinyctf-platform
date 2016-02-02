@@ -15,6 +15,10 @@ from functools import wraps
 from htmllaundry import sanitize
 from htmllaundry import strip_markup
 
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
+from sqlite3 import Connection as SQLite3Connection
+
 from flask import Flask
 from flask import jsonify
 from flask import make_response
@@ -97,6 +101,14 @@ def session_login(username):
     """Initializes the session with the current user's id"""
     user = db['users'].find_one(username=username)
     session['user_id'] = user['id']
+
+@event.listens_for(Engine, "connect")
+def _set_sqlite_pragma(dbapi_connection, connection_record):
+    """ Enforces sqlite foreign key constrains """
+    if isinstance(dbapi_connection, SQLite3Connection):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON;")
+        cursor.close()
 
 @app.route('/login', methods = ['POST'])
 def login():
