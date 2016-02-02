@@ -18,6 +18,7 @@ from htmllaundry import strip_markup
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlite3 import Connection as SQLite3Connection
+from werkzeug.contrib.fixers import ProxyFix
 
 from flask import Flask
 from flask import jsonify
@@ -481,14 +482,8 @@ if __name__ == '__main__':
     # Connect to database
     db = dataset.connect(config['db'])
 
-    # Setup the flags table at first execution
-    if 'flags' not in db.tables:
-        db.query('''create table flags (
-            task_id INTEGER,
-            user_id INTEGER,
-            score INTEGER,
-            timestamp BIGINT,
-            PRIMARY KEY (task_id, user_id))''')
+    if config['isProxied']:
+        app.wsgi_app = ProxyFix(app.wsgi_app)
 
     # Start web server
     app.run(host=config['host'], port=config['port'],
