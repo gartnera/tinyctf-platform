@@ -5,6 +5,8 @@
     "port": 8888,
 
 	"isProxied": false,
+
+	"startTime": "3-31-16 8:00AM",
     
     "db": "sqlite:///ctf.db",
     

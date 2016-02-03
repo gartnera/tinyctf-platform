@@ -9,6 +9,7 @@ import time
 import hashlib
 import datetime
 import os
+import dateparser
 
 from base64 import b64decode
 from functools import wraps
@@ -134,6 +135,10 @@ def login():
 def register():
     """Displays the register form"""
 
+    userCount = db['users'].count()
+    if datetime.datetime.today() < config['startTime'] and userCount != 0:
+        return redirect('/error/not_started')
+
     # Render template
     render = render_template('frame.html', lang=lang,
         page='register.html', login=False)
@@ -156,8 +161,18 @@ def register_submit():
     if user_found:
         return redirect('/error/already_registered')
 
+    isAdmin = False
+    userCount = db['users'].count()
+
+    #if no users, make first user admin
+    if userCount == 0:
+        isAdmin = True
+    elif datetime.datetime.today() < config['startTime']:
+        return redirect('/error/not_started')
+
+
     new_user = dict(username=username, email=email,
-        password=generate_password_hash(password), isAdmin=False)
+        password=generate_password_hash(password), isAdmin=isAdmin)
     db['users'].insert(new_user)
 
     # Set up the user id for this session
@@ -471,6 +486,12 @@ if __name__ == '__main__':
     config = json.loads(config_str)
 
     app.secret_key = config['secret_key']
+
+    # Convert start date to python object
+    if config['startTime']:
+        config['startTime'] = dateparser.parse(config['startTime'])
+    else:
+        config['startTime'] = datetime.datetime.min
 
     # Load language
     lang_str = open(config['language_file'], 'rb').read()
