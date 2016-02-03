@@ -478,34 +478,34 @@ def index():
         page='main.html', user=user)
     return make_response(render)
 
+"""Initializes the database and sets up the language"""
+
+# Load config
+config_str = open('config.json', 'rb').read()
+config = json.loads(config_str)
+
+app.secret_key = config['secret_key']
+
+# Convert start date to python object
+if config['startTime']:
+    config['startTime'] = dateparser.parse(config['startTime'])
+else:
+    config['startTime'] = datetime.datetime.min
+
+# Load language
+lang_str = open(config['language_file'], 'rb').read()
+lang = json.loads(lang_str)
+
+# Only a single language is supported for now
+lang = lang[config['language']]
+
+# Connect to database
+db = dataset.connect(config['db'])
+
+if config['isProxied']:
+    app.wsgi_app = ProxyFix(app.wsgi_app)
+
 if __name__ == '__main__':
-    """Initializes the database and sets up the language"""
-
-    # Load config
-    config_str = open('config.json', 'rb').read()
-    config = json.loads(config_str)
-
-    app.secret_key = config['secret_key']
-
-    # Convert start date to python object
-    if config['startTime']:
-        config['startTime'] = dateparser.parse(config['startTime'])
-    else:
-        config['startTime'] = datetime.datetime.min
-
-    # Load language
-    lang_str = open(config['language_file'], 'rb').read()
-    lang = json.loads(lang_str)
-
-    # Only a single language is supported for now
-    lang = lang[config['language']]
-
-    # Connect to database
-    db = dataset.connect(config['db'])
-
-    if config['isProxied']:
-        app.wsgi_app = ProxyFix(app.wsgi_app)
-
     # Start web server
     app.run(host=config['host'], port=config['port'],
         debug=config['debug'], threaded=True)
