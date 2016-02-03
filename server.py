@@ -162,17 +162,20 @@ def register_submit():
         return redirect('/error/already_registered')
 
     isAdmin = False
+    isHidden = False
     userCount = db['users'].count()
 
     #if no users, make first user admin
     if userCount == 0:
         isAdmin = True
+        isHidden = True
     elif datetime.datetime.today() < config['startTime']:
         return redirect('/error/not_started')
 
 
     new_user = dict(username=username, email=email,
-        password=generate_password_hash(password), isAdmin=isAdmin)
+        password=generate_password_hash(password), isAdmin=isAdmin,
+        isHidden=isHidden)
     db['users'].insert(new_user)
 
     # Set up the user id for this session
@@ -437,7 +440,7 @@ def scoreboard():
     user = get_user()
     scores = db.query('''select u.username, ifnull(sum(f.score), 0) as score,
         max(timestamp) as last_submit from users u left join flags f
-        on u.id = f.user_id where u.hidden = 0 group by u.username
+        on u.id = f.user_id where u.isHidden = 0 group by u.username
         order by score desc, last_submit asc''')
 
     scores = list(scores)
