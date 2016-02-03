@@ -20,11 +20,14 @@ Install some prerequisites
     yum install -y git
     yum install -y gcc-c++
     yum install -y python-devel
+    yum install -y sqlite3
     
 Install Flask and dataset
 
     easy_install Flask
     easy_install dataset
+    easy_install dateparser
+    easy_install htmllaundry
     exit
     
 Clone the repo
