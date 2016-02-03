@@ -27,7 +27,7 @@ Install Flask and dataset
     easy_install Flask
     easy_install dataset
     easy_install dateparser
-    easy_install htmllaundry
+    easy_install bleach
     exit
     
 Clone the repo

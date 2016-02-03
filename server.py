@@ -10,11 +10,10 @@ import hashlib
 import datetime
 import os
 import dateparser
+import bleach
 
 from base64 import b64decode
 from functools import wraps
-from htmllaundry import sanitize
-from htmllaundry import strip_markup
 
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
@@ -35,6 +34,8 @@ app = Flask(__name__, static_folder='static', static_url_path='')
 db = None
 lang = None
 config = None
+
+descAllowedTags = bleach.ALLOWED_TAGS + ['br', 'pre']
 
 def login_required(f):
     """Ensures that an user is logged in"""
@@ -270,7 +271,7 @@ def addcat():
 @admin_required
 def addcatsubmit():
     try:
-        name = strip_markup(request.form['name'])
+        name = bleach.clean(request.form['name'], tags=[])
     except KeyError:
         return redirect('/error/form')
     else:
@@ -295,14 +296,13 @@ def addtask(cat):
 @admin_required
 def addtasksubmit(cat):
     try:
-        name = strip_markup(request.form['name'])
-        desc = sanitize(request.form['desc'], wrap=None)
+        name = bleach.clean(request.form['name'], tags=[])
+        desc = bleach.clean(request.form['desc'], tags=descAllowedTags)
         category = int(request.form['category'])
         score = int(request.form['score'])
         flag = request.form['flag']
     except KeyError:
         return redirect('/error/form')
-
 
     else:
         tasks = db['tasks']
@@ -344,8 +344,8 @@ def edittask(tid):
 @admin_required
 def edittasksubmit(tid):
     try:
-        name = strip_markup(request.form['name'])
-        desc = sanitize(request.form['desc'], wrap=None)
+        name = bleach.clean(request.form['name'], tags=[])
+        desc = bleach.clean(request.form['desc'], tags=descAllowedTags)
         category = int(request.form['category'])
         score = int(request.form['score'])
         flag = request.form['flag']
