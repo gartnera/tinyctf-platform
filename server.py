@@ -28,6 +28,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+from flask import Response
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -449,6 +450,17 @@ def scoreboard():
     render = render_template('frame.html', lang=lang, page='scoreboard.html',
         user=user, scores=scores)
     return make_response(render)
+
+@app.route('/scoreboard.json')
+def scoreboard_json():
+    scores = db.query('''select u.username, ifnull(sum(f.score), 0) as score,
+        max(timestamp) as last_submit from users u left join flags f
+        on u.id = f.user_id where u.isHidden = 0 group by u.username
+        order by score desc, last_submit asc''')
+
+    scores = list(scores)
+
+    return Response(json.dumps(scores), mimetype='application/json')
 
 @app.route('/about')
 @login_required
