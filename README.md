@@ -35,9 +35,9 @@ Clone the repo
     git clone https://github.com/balidani/tinyctf-platform.git
     cd tinyctf-platform/
     
-Import the tasks
+Build the database
 
-    python task_import.py
+    ./buildTables.sh
     
 Start the server
 
@@ -49,4 +49,3 @@ Caveats
 -------
 
 * CSRF is currently not addressed
-* The platform does not support tasks with the same score and category right now
