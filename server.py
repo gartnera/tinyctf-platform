@@ -361,7 +361,10 @@ def edittasksubmit(tid):
         task['desc']=desc
         task['category']=category
         task['score']=score
-        task['flag']=flag
+
+        #only replace flag if value specified
+        if flag:
+            task['flag']=flag
 
         file = request.files['file']
 
