@@ -386,6 +386,22 @@ def edittasksubmit(tid):
         tasks.update(task, ['id'])
         return redirect('/tasks')
 
+@app.route('/tasks/<tid>/delete', methods=['GET'])
+@admin_required
+def deletetask(tid):
+    tasks = db['tasks']
+    task = tasks.find_one(id=tid)
+
+    user = get_user()
+    render = render_template('frame.html', lang=lang, user=user, page='deletetask.html', task=task)
+    return make_response(render)
+
+@app.route('/tasks/<tid>/delete', methods=['POST'])
+@admin_required
+def deletetasksubmit(tid):
+    db['tasks'].delete(id=tid)
+    return redirect('/tasks')
+
 @app.route('/tasks/<tid>/')
 @login_required
 def task(tid):

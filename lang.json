@@ -40,6 +40,8 @@
 		"addtask" : {
 			"add_title": "Add a Task",
 			"edit_title": "Edit a Task",
+			"delete_title": "Delete task",
+			"delete_desc": "Are you sure you want to delete this task?",
 			"cat_label": "Category: ",
 			"name_label": "Task Name: ",
 			"description_label": "Description: ",

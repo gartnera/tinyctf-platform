@@ -2,8 +2,11 @@
   <div class="row">
 	  <div class="task-box col-md-6 col-md-offset-3" >
 	  {% if user.isAdmin %}
+		  <a href="delete">
+			  <span id="task-delete-button" class="glyphicon glyphicon-trash admin-task-button"></span>
+		  </a>
 		  <a href="edit">
-			  <span id="task-edit-button" class="glyphicon glyphicon-edit"></span>
+			  <span id="task-edit-button" class="glyphicon glyphicon-edit admin-task-button"></span>
 		  </a>
 	  {% endif %}
       <h1>{{ task.name }}</h1>

@@ -216,12 +216,19 @@ background-size: cover;
     text-align: center;
 }
 
-#task-edit-button {
+.admin-task-button {
 	position: absolute;
-	right: 0;
 	top: 0;
-	padding: 10px;
+	padding: 15px;
 	font-size: 20pt;
-	background-color: #ccc;
+	background-color: #999;
 	color: black;
+}
+
+#task-edit-button {
+	right: 0;
+}
+
+#task-delete-button {
+	left: 0;
 }
