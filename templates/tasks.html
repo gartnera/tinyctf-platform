@@ -18,9 +18,15 @@
 			</div>
 		</a>
 		{% else %}
+		{%if user.isAdmin %}
+		<a href="/editcat/{{ task.id }}" >
+		{% endif %}
 		<div class="chall-category col-md-1">
 			{{ task.name }}
 		</div>
+		{%if user.isAdmin %}
+		</a>
+		{% endif %}
 		{% endif %}
 		{% endfor %}
 		</div>

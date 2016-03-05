@@ -199,7 +199,8 @@ def tasks():
 
     flags = db['flags']
 
-    tasks = db['tasks']
+    tasks = db.query("SELECT * FROM tasks ORDER BY category, score")
+    tasks = list(tasks)
 
     grid = []
 
@@ -250,6 +251,41 @@ def addcatsubmit():
         categories = db['categories']
         categories.insert(dict(name=name))
         return redirect('/tasks')
+
+@app.route('/editcat/<id>/', methods=['GET'])
+@admin_required
+def editcat(id):
+    user = get_user()
+    category = db['categories'].find_one(id=id)
+    render = render_template('frame.html', lang=lang, user=user, category=category, page='editcat.html')
+    return make_response(render)
+
+@app.route('/editcat/<catId>/', methods=['POST'])
+@admin_required
+def editcatsubmit(catId):
+    try:
+        name = bleach.clean(request.form['name'], tags=[])
+    except KeyError:
+        return redirect('/error/form')
+    else:
+        categories = db['categories']
+        categories.update(dict(name=name, id=catId), ['id'])
+        return redirect('/tasks')
+
+@app.route('/editcat/<catId>/delete', methods=['GET'])
+@admin_required
+def deletecat(catId):
+    category = db['categories'].find_one(id=catId)
+
+    user = get_user()
+    render = render_template('frame.html', lang=lang, user=user, page='deletecat.html', category=category)
+    return make_response(render)
+
+@app.route('/editcat/<catId>/delete', methods=['POST'])
+@admin_required
+def deletecatsubmit(catId):
+    db['categories'].delete(id=catId)
+    return redirect('/tasks')
 
 @app.route('/addtask/<cat>/', methods=['GET'])
 @admin_required
