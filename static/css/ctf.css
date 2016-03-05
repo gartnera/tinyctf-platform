@@ -98,6 +98,15 @@ background-size: cover;
  * Tasks page
  */
 
+.category-column > a{
+	float: left;
+	clear: left;
+}
+
+.category-column{
+	float: left;
+}
+
 
 .chall-box-score {
 	z-index:100;

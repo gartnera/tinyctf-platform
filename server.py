@@ -192,69 +192,40 @@ def tasks():
 
     user = get_user()
     userCount = db['users'].count()
+    isAdmin = user['isAdmin']
 
     categories = db['categories']
     catCount = categories.count()
 
     flags = db['flags']
 
-    tasks = db.query("SELECT * FROM tasks ORDER BY category, score");
-
-    tasks = list(tasks)
+    tasks = db['tasks']
 
     grid = []
 
-    rowCount = 0
-    currentCat = 0
-    currentCatCount = 0
+    for cat in categories:
+        cTasks = [x for x in tasks if x['category'] == cat['id']]
+        gTasks = []
 
-    if len(tasks) == 0:
-        row = [None] * catCount
-        grid.append(row)
+        gTasks.append(cat)
+        for task in cTasks:
+            percentComplete = (float(flags.count(task_id=task['id'])) / userCount) * 100
 
-    for task in tasks:
-        cat = task["category"] - 1
+            #hax for bad css (if 100, nothing will show)
+            if percentComplete == 100:
+                percentComplete = 99.99
 
-        while currentCatCount + 1 >= rowCount:
-            row = [None] * catCount
-            grid.append(row)
-            rowCount += 1
+            task['percentComplete'] = percentComplete
 
-        if currentCat != cat:
-            if user['isAdmin']:
-                endTask = { "end": True, "category": currentCat }
-                grid[currentCatCount][currentCat] = endTask
-            currentCat = cat
-            currentCatCount = 0
+            isComplete = bool(flags.count(task_id=task['id'], user_id=user['id']))
 
+            task['isComplete'] = isComplete
+            gTasks.append(task)
 
-        percentComplete = (float(flags.count(task_id=task['id'])) / userCount) * 100
+        if isAdmin:
+            gTasks.append({'add': True, 'category': cat['id']})
 
-        #hax for bad css (if 100, nothing will show)
-        if percentComplete == 100:
-            percentComplete = 99.99
-
-        task['percentComplete'] = percentComplete
-
-        isComplete = bool(flags.count(task_id=task['id'], user_id=user['id']))
-
-        task['isComplete'] = isComplete
-
-        grid[currentCatCount][cat] = task
-        currentCatCount += 1
-
-    #add the final endTask element
-    if user['isAdmin']:
-        if len(tasks) > 0:
-            endTask = { "end": True, "category": currentCat }
-            grid[currentCatCount][currentCat] = endTask
-
-        #if any None in first row, add end task
-        for i, t in enumerate(grid[0]):
-            if t is None:
-                endTask = { "end": True, "category": i }
-                grid[0][i] = endTask
-
+        grid.append(gTasks)
 
     # Render template
     render = render_template('frame.html', lang=lang, page='tasks.html',
@@ -283,9 +254,7 @@ def addcatsubmit():
 @app.route('/addtask/<cat>/', methods=['GET'])
 @admin_required
 def addtask(cat):
-    category = db.query('SELECT * FROM categories LIMIT 1 OFFSET :cat', cat=cat)
-    category = list(category)
-    category = category[0]
+    category = db['categories'].find_one(id=cat)
 
     user = get_user()
 

@@ -1,9 +1,28 @@
 <div class="landing-page container">
 
 	<div class="row">
-		{% for category in categories %}
+		{% for row in grid %}
+		<div class="category-column">
+		{% for task in row %}
+
+		{% if task.score  %}
+		<a href="/tasks/{{ task.id }}">
+			<div style="animation-delay: -{{task.percentComplete}}s" class="chall-box chall-task col-md-1 {% if task.isComplete %}chall-done{% endif %}">
+				<span class="chall-box-score">{{ task.score }}</span>
+			</div>
+		</a>
+		{% elif task.add %}
+		<a href="/addtask/{{ task.category }}" >
+			<div class="add-box col-md-1">
+				+
+			</div>
+		</a>
+		{% else %}
 		<div class="chall-category col-md-1">
-			{{ category.name }}
+			{{ task.name }}
+		</div>
+		{% endif %}
+		{% endfor %}
 		</div>
 		{% endfor %}
 		{% if user.isAdmin %}
@@ -13,32 +32,7 @@
 			</div>
 		</a>
 		{% endif %}
-
 	</div>
-
-	{% for row in grid %}
-	<div class="row">
-		{% for task in row %}
-		{% if task.id  %}
-		<a href="/tasks/{{ task.id }}">
-			<div style="animation-delay: -{{task.percentComplete}}s" class="chall-box chall-task col-md-1 {% if task.isComplete %}chall-done{% endif %}">
-				<span class="chall-box-score">{{ task.score }}</span>
-			</div>
-		</a>
-		{% elif task.end %}
-		<a href="/addtask/{{ task.category }}" >
-			<div class="add-box col-md-1">
-				+
-			</div>
-		</a>
-		{% else %}
-		<div class="chall-hidden col-md-1">
-			&nbsp;
-		</div>
-		{% endif %}
-		{% endfor %}
-	</div>
-	{% endfor %}
 
 </div>
 
