@@ -191,7 +191,7 @@ def tasks():
     """Displays all the tasks in a grid"""
 
     user = get_user()
-    userCount = db['users'].count()
+    userCount = db['users'].count(isHidden=0)
     isAdmin = user['isAdmin']
 
     categories = db['categories']
