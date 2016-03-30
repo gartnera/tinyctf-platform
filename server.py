@@ -9,7 +9,7 @@ import time
 import hashlib
 import datetime
 import os
-import dateparser
+import dateutil.parser
 import bleach
 
 from base64 import b64decode
@@ -527,7 +527,7 @@ app.secret_key = config['secret_key']
 
 # Convert start date to python object
 if config['startTime']:
-    config['startTime'] = dateparser.parse(config['startTime'])
+    config['startTime'] = dateutil.parser.parse(config['startTime'])
 else:
     config['startTime'] = datetime.datetime.min
 
