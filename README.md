@@ -26,7 +26,7 @@ Install Flask and dataset
 
     easy_install Flask
     easy_install dataset
-    easy_install dateparser
+    easy_install python-dateutil
     easy_install bleach
     exit
     
