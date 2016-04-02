@@ -76,7 +76,7 @@ def get_task(tid):
     task = db.query("SELECT t.*, c.name cat_name FROM tasks t JOIN categories c on c.id = t.category WHERE t.id = :tid",
             tid=tid)
 
-    return list(task)[0]
+    return task.next()
 
 def get_flags():
     """Returns the flags of the current user"""
@@ -85,6 +85,17 @@ def get_flags():
         where f.user_id = :user_id''',
         user_id=session['user_id'])
     return [f['task_id'] for f in list(flags)]
+
+def get_total_completion_count():
+    """Returns dictionary where key is task id and value is the number of users who have submitted the flag"""
+
+    c = db.query("select t.id, count(t.id) count from tasks t join flags f on t.id = f.task_id group by t.id;")
+
+    res = {}
+    for r in c:
+        res.update({r['id']: r['count']})
+
+    return res
 
 @app.route('/error/<msg>')
 def error(msg):
@@ -197,10 +208,11 @@ def tasks():
     categories = db['categories']
     catCount = categories.count()
 
-    flags = db['flags']
+    flags = get_flags()
 
     tasks = db.query("SELECT * FROM tasks ORDER BY category, score")
     tasks = list(tasks)
+    taskCompletedCount = get_total_completion_count()
 
     grid = []
 
@@ -210,7 +222,11 @@ def tasks():
 
         gTasks.append(cat)
         for task in cTasks:
-            percentComplete = (float(flags.count(task_id=task['id'])) / userCount) * 100
+            tid = task['id']
+            if tid in taskCompletedCount:
+                percentComplete = (float(taskCompletedCount[tid]) / userCount) * 100
+            else:
+                percentComplete = 0
 
             #hax for bad css (if 100, nothing will show)
             if percentComplete == 100:
@@ -218,9 +234,7 @@ def tasks():
 
             task['percentComplete'] = percentComplete
 
-            isComplete = bool(flags.count(task_id=task['id'], user_id=user['id']))
-
-            task['isComplete'] = isComplete
+            task['isComplete'] = tid in flags
             gTasks.append(task)
 
         if isAdmin:

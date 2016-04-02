@@ -62,7 +62,8 @@ background-size: cover;
  */
 
 .landing-page {
-    padding-top: 100px;
+    padding-top: 70px;
+	padding-bottom: 40px;
 }
 
 .landing-page h1 {
