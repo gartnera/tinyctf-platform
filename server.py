@@ -512,6 +512,39 @@ def about():
         user=user)
     return make_response(render)
 
+@app.route('/settings')
+@login_required
+def settings():
+    user = get_user()
+    render = render_template('frame.html', lang=lang, page='settings.html',
+        user=user)
+    return make_response(render)
+
+@app.route('/settings', methods = ['POST'])
+@login_required
+def settings_submit():
+    from werkzeug.security import check_password_hash
+    from werkzeug.security import generate_password_hash
+
+    user = get_user()
+    try:
+        old_pw = request.form['old-pw']
+        new_pw = request.form['new-pw']
+        email = request.form['email']
+    except KeyError:
+        return redirect('/error/form')
+
+    if old_pw and check_password_hash(user['password'], old_pw):
+        if new_pw:
+            user['password'] = generate_password_hash(new_pw)
+        if email:
+            user['email'] = email
+    else:
+        return redirect('/error/invalid_password')
+
+    db["users"].update(user, ['id'])
+    return redirect('/tasks')
+
 @app.route('/logout')
 @login_required
 def logout():

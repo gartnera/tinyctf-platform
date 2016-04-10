@@ -56,12 +56,19 @@
             "player": "Player",
             "score": "Score"
         },
+		"settings": {
+			"title": "Settings",
+			"old_pw": "Current Password:",
+			"new_pw": "New Password:",
+			"email": "Email:"
+		},
         "error": {
             "title": "Error",
             "unknown": "Unknown error",
             "login_required": "You need to be logged in to see this page",
             "admin_required": "You need to be an admin to see this page",
             "invalid_credentials": "Invalid username or password",
+            "invalid_password": "The password you entered does not match your current password",
             "already_registered": "This user is already registered",
             "empty_user": "Empty username is not allowed",
             "task_not_found": "TBD",
