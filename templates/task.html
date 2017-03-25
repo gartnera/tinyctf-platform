@@ -14,10 +14,8 @@
         {{ lang.task.solution_format % solutions }})</h5>
       <br/>
       <p>
+        {% if task.desc %}
         <b>{{ lang.task.description }}: </b>
-        {% if not task.desc %}
-          {{ lang.task.no_description }}
-        {% else %}
           {{ task.desc|safe }}
         {% endif %}
       </p>

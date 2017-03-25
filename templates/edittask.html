@@ -11,7 +11,7 @@
 				
 
 				<label>{{ lang.addtask.description_label }}</label>
-				<textarea name="desc" type="text" required="required" class="form-control" rows="10" >{{ task.desc | e }}</textarea>
+				<textarea name="desc" type="text" class="form-control" rows="10" >{{ task.desc | e }}</textarea>
 
 				<label>{{ lang.addtask.score_label }}</label>
 				<input name="score" type="number" required="required" class="form-control" value="{{ task.score }}"/>
